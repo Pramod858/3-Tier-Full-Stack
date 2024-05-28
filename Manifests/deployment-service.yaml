@@ -13,7 +13,7 @@ spec:
         app: myapp
     spec:
       containers:
-      - name: myapp-container
+      - name: three-tier-full-stack
         image: pramod858/three-tier-full-stack:latest
         imagePullPolicy: Always
         ports:
