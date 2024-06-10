@@ -1,0 +1,67 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  namespace: workshop
+  name: myapp-deployment
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: myapp
+  template:
+    metadata:
+      labels:
+        app: myapp
+    spec:
+      containers:
+      - name: three-tier-full-stack
+        image: pramod858/three-tier-full-stack:latest
+        imagePullPolicy: Always
+        ports:
+        - containerPort: 3000
+        env:
+        - name: CLOUDINARY_CLOUD_NAME
+          valueFrom:
+            secretKeyRef:
+              name: myapp-secrets
+              key: CLOUDINARY_CLOUD_NAME
+        - name: CLOUDINARY_KEY
+          valueFrom:
+            secretKeyRef:
+              name: myapp-secrets
+              key: CLOUDINARY_KEY
+        - name: CLOUDINARY_SECRET
+          valueFrom:
+            secretKeyRef:
+              name: myapp-secrets
+              key: CLOUDINARY_SECRET
+        - name: MAPBOX_TOKEN
+          valueFrom:
+            secretKeyRef:
+              name: myapp-secrets
+              key: MAPBOX_TOKEN
+        - name: DB_URL
+          valueFrom:
+            secretKeyRef:
+              name: myapp-secrets
+              key: DB_URL
+        - name: SECRET
+          valueFrom:
+            secretKeyRef:
+              name: myapp-secrets
+              key: SECRET
+---
+apiVersion: v1
+kind: Service
+metadata:
+  namespace: workshop
+  name: myapp-service
+spec:
+  selector:
+    app: myapp
+  ports:
+  - name: http
+    port: 80
+    protocol: TCP
+    targetPort: 3000
+  type: ClusterIP
