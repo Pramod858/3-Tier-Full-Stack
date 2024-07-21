@@ -7,8 +7,8 @@ metadata:
   annotations:
     alb.ingress.kubernetes.io/load-balancer-name: cpr-ingress
     alb.ingress.kubernetes.io/scheme: internet-facing
-    alb.ingress.kubernetes.io/target-type: instance
-    alb.ingress.kubernetes.io/backend-protocol: HTTP
+    alb.ingress.kubernetes.io/target-type: ip
+    alb.ingress.kubernetes.io/listen-ports: '[{"HTTP": 80}]'
     alb.ingress.kubernetes.io/healthcheck-path: /
     alb.ingress.kubernetes.io/healthcheck-port: 'traffic-port'
     alb.ingress.kubernetes.io/healthcheck-interval-seconds: '15'
@@ -20,13 +20,12 @@ metadata:
 spec:
   ingressClassName: alb
   rules:
-    - host: example.com
-      http:
+    - http:
         paths:
           - path: /
             pathType: Prefix
             backend:
               service:
                 name: myapp-service
-                port:
+                port: 
                   number: 80
