@@ -5,21 +5,23 @@ metadata:
   name: ingress-cpr-demo
   namespace: workshop
   annotations:
-    # Load Balancer Name
     alb.ingress.kubernetes.io/load-balancer-name: cpr-ingress
-    # Ingress Core Settings
-    kubernetes.io/ingress.class: "alb"
-    # Health Check Settings
-    alb.ingress.kubernetes.io/healthcheck-protocol: HTTP
-    alb.ingress.kubernetes.io/healthcheck-port: traffic-port
+    alb.ingress.kubernetes.io/scheme: internet-facing
+    alb.ingress.kubernetes.io/target-type: instance
+    alb.ingress.kubernetes.io/backend-protocol: HTTP
+    alb.ingress.kubernetes.io/healthcheck-path: /
+    alb.ingress.kubernetes.io/healthcheck-port: 'traffic-port'
     alb.ingress.kubernetes.io/healthcheck-interval-seconds: '15'
     alb.ingress.kubernetes.io/healthcheck-timeout-seconds: '5'
     alb.ingress.kubernetes.io/success-codes: '200'
     alb.ingress.kubernetes.io/healthy-threshold-count: '2'
     alb.ingress.kubernetes.io/unhealthy-threshold-count: '2'
+    kubernetes.io/ingress.class: alb
 spec:
+  ingressClassName: alb
   rules:
-    - http:
+    - host: example.com
+      http:
         paths:
           - path: /
             pathType: Prefix
